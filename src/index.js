@@ -83,7 +83,7 @@ class Game extends React.Component {
         'Перейти к ходу #' + move :
         'К началу игры';
       return (
-        <li>
+        <li key={move}>
           <button onClick={()=>this.jumpTo(move)}>{desc}</button>
         </li>
       );
