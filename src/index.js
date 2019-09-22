@@ -4,8 +4,8 @@ import './index.css';
 function Square(props) {
   return (
     <button
-      className="square"
-      onClick={props.onClick}
+      className={props.activeSquare?'square active':'square'}
+      onClick={props.onClick}      
     >
       {props.value}
     </button>
@@ -18,8 +18,13 @@ class Board extends React.Component {
       <Square
         value={this.props.squares[i]}
         onClick={() => this.props.onClick(i)}
+        activeSquare={this.props.activeSquare === i}
       />
     );
+  }
+
+  renderRow(i) {
+
   }
 
   render() {
@@ -120,6 +125,7 @@ class Game extends React.Component {
           <Board
             squares={current.squares}
             onClick={(i) => this.handleClick(i)}
+            activeSquare={current.position}
           />
         </div>
         <div className="game-info">
