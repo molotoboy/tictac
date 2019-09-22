@@ -14,10 +14,10 @@ function Square(props) {
 
 class Board extends React.Component {
   renderSquare(i) {
-    
-    let winSquare=false;
-    if (this.props.winnerPositions)  {
-      winSquare=this.props.winnerPositions.includes(i);
+
+    let winSquare = false;
+    if (this.props.winnerPositions) {
+      winSquare = this.props.winnerPositions.includes(i);
     }
     return (
       <Square
@@ -78,11 +78,11 @@ class Game extends React.Component {
     const squares = current.squares.slice();
     const winnerPositions = calculateWinner(current.squares);
 
-    if(squares[i] || winnerPositions) {
+    if (squares[i] || winnerPositions) {
       return;
     }
 
-    if (winnerPositions){
+    if (winnerPositions) {
       this.setState({
         winnerPositions: winnerPositions,
       });
@@ -129,6 +129,8 @@ class Game extends React.Component {
     let status;
     if (winner) {
       status = 'Выиграл ' + winner;
+    } else if (this.state.stepNumber === 9) {
+      status = 'Ничья';
     } else {
       status = 'Следующий ход: ' + (this.state.xIsNext ? 'X' : 'O');
     }
