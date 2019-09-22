@@ -88,7 +88,7 @@ class Game extends React.Component {
     let x, y;
     x = position % 3;
     y = (position - x) / 3;
-    return `(${x+1},${y+1})`
+    return `(${x + 1},${y + 1})`
   }
 
   render() {
@@ -98,11 +98,11 @@ class Game extends React.Component {
 
     const moves = history.map((step, move) => {
       const desc = move ?
-        'Перейти к ходу #' + move +' '+ this.positionToString(step.position):
+        'Перейти к ходу #' + move + ' ' + (move % 2 ? 'X' : 'O') + this.positionToString(step.position) :
         'К началу игры';
       return (
         <li key={move}>
-          <button onClick={() => this.jumpTo(move)}>{desc}</button>
+          <button className={this.state.stepNumber === move ? 'active' : ''} onClick={() => this.jumpTo(move)}>{desc}</button>
         </li>
       );
     });
