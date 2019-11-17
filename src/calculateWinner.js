@@ -23,7 +23,7 @@ function calculateWinner(squares, boardW = 3, boardH = 3, goal = 3) {
     ) {
       if (squares[cur] === squares[cur + i]) {
         winRow.push(cur + i);
-        console.log('-', cur, i, winRow);
+        // console.log('-', cur, i, winRow);
         if (winRow.length === goal) return winRow;
       } else {
         winRow = [];
@@ -44,7 +44,7 @@ function calculateWinner(squares, boardW = 3, boardH = 3, goal = 3) {
     ) {
       if (squares[cur] === squares[cur + i]) {
         winRow.push(cur + i);
-        console.log('|', cur, i, winRow);
+        // console.log('|', cur, i, winRow);
         if (winRow.length === goal) return winRow;
       } else {
         winRow = [];
@@ -66,7 +66,7 @@ function calculateWinner(squares, boardW = 3, boardH = 3, goal = 3) {
     ) {
       if (squares[cur] === squares[cur + i]) {
         winRow.push(cur + i);
-        console.log('\\', cur, i, winRow, ii, boardW - (cur % boardW));
+        // console.log('\\', cur, i, winRow, ii, boardW - (cur % boardW));
         if (winRow.length === goal) return winRow;
       } else {
         winRow = [];
@@ -88,7 +88,7 @@ function calculateWinner(squares, boardW = 3, boardH = 3, goal = 3) {
     ) {
       if (squares[cur] === squares[cur + i]) {
         winRow.push(cur + i);
-        console.log('/', cur, i, winRow, ii, cur % boardW);
+        // console.log('/', cur, i, winRow, ii, cur % boardW);
         if (winRow.length === goal) return winRow;
       } else {
         winRow = [];
@@ -97,7 +97,7 @@ function calculateWinner(squares, boardW = 3, boardH = 3, goal = 3) {
     }
   }
   if (winRow.length === goal) return winRow;
-  return [];
+  return null;
 }
 
 export default calculateWinner;

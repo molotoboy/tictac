@@ -7,7 +7,7 @@ test('should NO win on empty', () => {
 test('should NO win on fill null', () => {
   expect(
     calculateWinner([null, null, null, null, null, null, null, null, null])
-  ).toEqual([]);
+  ).toEqual(null);
 });
 
 test('should WIN 1st horizontal XXX', () => {
@@ -31,13 +31,13 @@ test('should WIN 3rd horizontal XXX', () => {
 test('should NO win horizontal XX ', () => {
   expect(
     calculateWinner(['X', 'X', null, null, 'X', 'X', 'X', null, null])
-  ).toEqual([]);
+  ).toEqual(null);
 });
 
 test('should NO win on XOX O-O XO- ', () => {
   expect(
     calculateWinner(['X', 'O', 'X', 'O', null, 'O', 'X', 'O', null])
-  ).toEqual([]);
+  ).toEqual(null);
 });
 
 test('should Win 1st vertical XXX ', () => {
@@ -68,4 +68,19 @@ test('should Win diagonal / XXX ', () => {
   expect(
     calculateWinner(['X', 'O', 'X', 'O', 'X', 'O', 'X', 'X', 'O'])
   ).toEqual([2, 4, 6]);
+});
+
+test('should Win diagonal / XXXX ', () => {
+  expect(
+    calculateWinner(
+      []
+        .concat(['X', 'O', 'X', 'X'])
+        .concat(['O', 'X', 'X', 'X'])
+        .concat(['X', 'X', 'O', 'O'])
+        .concat(['X', 'X', 'O', 'X']),
+      4,
+      4,
+      4
+    )
+  ).toEqual([3, 6, 9, 12]);
 });
