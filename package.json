@@ -5,10 +5,11 @@
   "dependencies": {
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
-    "react-scripts": "3.1.1"
+    "react-scripts": "^3.4.1"
   },
   "scripts": {
     "format": "prettier \"src/**/*.{js,html}\" --write",
+    "lint": "eslint \"src/**/*.{js,jsx}\" --quiet",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -30,6 +31,11 @@
     ]
   },
   "devDependencies": {
-    "prettier": "^1.19.1"
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-react": "^7.19.0",
+    "prettier": "^1.19.1",
+    "prop-types": "^15.7.2"
   }
 }
