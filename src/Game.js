@@ -1,6 +1,7 @@
 import React from "react";
 import calculateWinner from "./calculateWinner";
 import { Board } from "./Board";
+import MoveList from "./blocks/MoveList";
 export class Game extends React.Component {
   constructor(props) {
     super(props);
@@ -15,7 +16,7 @@ export class Game extends React.Component {
         }
       ],
       winnerPositions: [],
-      stepNumber: 0,
+      activeStep: 0,
       xIsNext: true
     };
     // console.log(this.state);
@@ -27,13 +28,13 @@ export class Game extends React.Component {
   }
   jumpTo = step => {
     this.setState({
-      stepNumber: step,
+      activeStep: step,
       xIsNext: step % 2 === 0
     });
   };
   handleClick = i => {
     const { boardW, boardH, goal } = this.state;
-    const history = this.state.history.slice(0, this.state.stepNumber + 1);
+    const history = this.state.history.slice(0, this.state.activeStep + 1);
     const current = history[history.length - 1];
     const squares = current.squares.slice();
     const winnerPositions = calculateWinner(
@@ -59,20 +60,15 @@ export class Game extends React.Component {
           position: i
         }
       ]),
-      stepNumber: history.length,
+      activeStep: history.length,
       xIsNext: !this.state.xIsNext
     });
   };
-  positionToString(position) {
-    const { boardW, boardH } = this.state;
-    const x = position % boardW;
-    const y = (position - x) / boardH;
-    return `(${x + 1},${y + 1})`;
-  }
+
   render() {
     const { boardH, boardW, goal } = this.state;
     const history = this.state.history;
-    const current = history[this.state.stepNumber];
+    const current = history[this.state.activeStep];
     const winnerPositions = calculateWinner(
       current.squares,
       boardH,
@@ -83,29 +79,11 @@ export class Game extends React.Component {
     if (winnerPositions) {
       winner = current.squares[winnerPositions[0]];
     }
-    const moves = history.map((step, move) => {
-      const desc = move
-        ? "Перейти к ходу #" +
-          move +
-          " " +
-          (move % 2 ? "X" : "O") +
-          this.positionToString(step.position)
-        : "К началу игры";
-      return (
-        <li key={move}>
-          <button
-            className={this.state.stepNumber === move ? "active" : ""}
-            onClick={() => this.jumpTo(move)}
-          >
-            {desc}
-          </button>
-        </li>
-      );
-    });
+
     let status;
     if (winner) {
       status = "Выиграл " + winner;
-    } else if (this.state.stepNumber === boardH * boardW) {
+    } else if (this.state.activeStep === boardH * boardW) {
       status = "Игра окончилась вничью";
     } else {
       status = "Следующий ход: " + (this.state.xIsNext ? "X" : "O");
@@ -124,7 +102,13 @@ export class Game extends React.Component {
         </div>
         <div className="game-info">
           <h2>{status}</h2>
-          <ol>{moves}</ol>
+          <MoveList
+            history={history}
+            boardW={boardW}
+            boardH={boardH}
+            jumpToMoveHandler={this.jumpTo}
+            activeStep={this.state.activeStep}
+          />
         </div>
       </div>
     );
