@@ -95,7 +95,7 @@ export class Game extends React.Component {
             boardW={boardW}
             boardH={boardH}
             squares={current.squares}
-            onClick={i => this.handleClick(i)}
+            handleClick={this.handleClick}
             activeSquare={current.position}
             winnerPositions={winnerPositions}
           />

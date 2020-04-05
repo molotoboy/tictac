@@ -11,7 +11,7 @@ export class Board extends React.Component {
       <Square
         key={i}
         value={this.props.squares[i]}
-        onClick={() => this.props.onClick(i)}
+        handleClick={() => this.props.handleClick(i)}
         activeSquare={this.props.activeSquare === i || winSquare}
       />
     );
@@ -39,7 +39,7 @@ export class Board extends React.Component {
 }
 Board.propTypes = {
   winnerPositions: PropTypes.array,
-  onClick: PropTypes.func,
+  handleClick: PropTypes.func,
   squares: PropTypes.array,
   activeSquare: PropTypes.number,
   boardW: PropTypes.number,

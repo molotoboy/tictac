@@ -4,7 +4,7 @@ export function Square(props) {
   return (
     <button
       className={props.activeSquare ? "square square_active" : "square"}
-      onClick={props.onClick}
+      onClick={props.handleClick}
     >
       {props.value}
     </button>
@@ -12,6 +12,6 @@ export function Square(props) {
 }
 Square.propTypes = {
   activeSquare: PropTypes.bool,
-  onClick: PropTypes.func,
+  handleClick: PropTypes.func,
   value: PropTypes.string
 };
