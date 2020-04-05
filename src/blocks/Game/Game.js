@@ -34,7 +34,7 @@ export class Game extends React.Component {
       xIsNext: step % 2 === 0
     });
   };
-  handleClick = i => {
+  squareClickHandler = i => {
     const { boardW, boardH, goal } = this.state;
     const history = this.state.history.slice(0, this.state.activeStep + 1);
     const current = history[history.length - 1];
@@ -97,7 +97,7 @@ export class Game extends React.Component {
             boardW={boardW}
             boardH={boardH}
             squares={current.squares}
-            handleClick={this.handleClick}
+            squareClickHandler={this.squareClickHandler}
             activeSquare={current.position}
             winnerPositions={winnerPositions}
           />

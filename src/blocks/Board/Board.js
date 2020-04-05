@@ -13,24 +13,15 @@ export class Board extends React.Component {
       <Square
         key={i}
         value={this.props.squares[i]}
-        handleClick={() => this.props.handleClick(i)}
+        squareClickHandler={() => this.props.squareClickHandler(i)}
         activeSquare={this.props.activeSquare === i || winSquare}
       />
     );
   }
   renderRows(boardW, boardH) {
     const rows = [];
-    let current = 0;
-    for (let j = 0; j < boardH; j++) {
-      const cols = [];
-      for (let i = 0; i < boardW; i++) {
-        cols.push(this.renderSquare(current++));
-      }
-      rows.push(
-        <div key={j} className="Board-row">
-          {cols}
-        </div>
-      );
+    for (let current = 0; current < boardH * boardW; current++) {
+      rows.push(this.renderSquare(current));
     }
     return rows;
   }
@@ -41,7 +32,7 @@ export class Board extends React.Component {
 }
 Board.propTypes = {
   winnerPositions: PropTypes.array,
-  handleClick: PropTypes.func,
+  squareClickHandler: PropTypes.func,
   squares: PropTypes.array,
   activeSquare: PropTypes.number,
   boardW: PropTypes.number,
