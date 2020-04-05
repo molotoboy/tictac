@@ -1,6 +1,8 @@
 import React from "react";
-import { Square } from "./Square";
+import { Square } from "../Square/Square";
 import { PropTypes } from "prop-types";
+import "./Board.css";
+
 export class Board extends React.Component {
   renderSquare(i) {
     let winSquare = false;
@@ -25,7 +27,7 @@ export class Board extends React.Component {
         cols.push(this.renderSquare(current++));
       }
       rows.push(
-        <div key={j} className="board-row">
+        <div key={j} className="Board-row">
           {cols}
         </div>
       );
@@ -34,7 +36,7 @@ export class Board extends React.Component {
   }
   render() {
     const { boardW, boardH } = this.props;
-    return <div>{this.renderRows(boardW, boardH)}</div>;
+    return <div className="Board">{this.renderRows(boardW, boardH)}</div>;
   }
 }
 Board.propTypes = {

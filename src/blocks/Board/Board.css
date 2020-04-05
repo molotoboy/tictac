@@ -1,0 +1,11 @@
+.Board {
+}
+
+.Board-row {
+}
+
+.Board-row:after {
+  clear: both;
+  content: "";
+  display: table;
+}

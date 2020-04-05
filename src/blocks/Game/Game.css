@@ -1,0 +1,11 @@
+.Game {
+  display: flex;
+  flex-direction: row;
+}
+
+.Game-board {
+}
+
+.Game-info {
+  margin-left: 20px;
+}

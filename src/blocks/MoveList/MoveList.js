@@ -8,12 +8,12 @@ export default function MoveList({
   activeStep
 }) {
   return (
-    <div>
+    <div className="MoveList">
       <ol start="0">
         {history.map((step, move) => (
           <li key={move}>
             <button
-              className={activeStep === move ? "MoveList_active" : ""}
+              className={activeStep === move ? "MoveList-active" : ""}
               onClick={() => jumpToMoveHandler(move)}
             >
               {move
