@@ -1,11 +1,15 @@
 import React from "react";
 import PropTypes from "prop-types";
-import "./Square.css";
+import styles from "./Square.module.css";
 
 export function Square(props) {
   return (
     <button
-      className={props.activeSquare ? "Square Square-active" : "Square"}
+      className={
+        props.activeSquare
+          ? `${styles.Square} ${styles.Square_active}`
+          : styles.Square
+      }
       onClick={props.squareClickHandler}
     >
       {props.value}

@@ -1,7 +1,7 @@
 import React from "react";
 import { Square } from "../Square/Square";
 import { PropTypes } from "prop-types";
-import "./Board.css";
+import styles from "./Board.module.css";
 
 export class Board extends React.Component {
   renderSquare(i) {
@@ -27,7 +27,9 @@ export class Board extends React.Component {
   }
   render() {
     const { boardW, boardH } = this.props;
-    return <div className="Board">{this.renderRows(boardW, boardH)}</div>;
+    return (
+      <div className={styles.Board}>{this.renderRows(boardW, boardH)}</div>
+    );
   }
 }
 Board.propTypes = {

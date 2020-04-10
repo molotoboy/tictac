@@ -1,5 +1,5 @@
 import React from "react";
-import "./MoveList.css";
+import "./MoveList.module.css";
 export default function MoveList({
   history,
   boardW,

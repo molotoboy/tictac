@@ -3,9 +3,9 @@
   flex-direction: row;
 }
 
-.Game-board {
+.Game__board {
 }
 
-.Game-info {
+.Game__info {
   margin-left: 20px;
 }

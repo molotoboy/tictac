@@ -2,7 +2,7 @@ import React from "react";
 import calculateWinner from "../../calculateWinner";
 import { Board } from "../Board/Board";
 import MoveList from "../MoveList/MoveList";
-import "./Game.css";
+import styles from "./Game.module.css";
 
 export class Game extends React.Component {
   constructor(props) {
@@ -91,8 +91,8 @@ export class Game extends React.Component {
       status = "Следующий ход: " + (this.state.xIsNext ? "X" : "O");
     }
     return (
-      <div className="Game">
-        <div className="Game-board">
+      <div className={styles.Game}>
+        <div className={styles.Game__board}>
           <Board
             boardW={boardW}
             boardH={boardH}
@@ -102,7 +102,7 @@ export class Game extends React.Component {
             winnerPositions={winnerPositions}
           />
         </div>
-        <div className="Game-info">
+        <div className={styles.Game__info}>
           <h2>{status}</h2>
           <MoveList
             history={history}
