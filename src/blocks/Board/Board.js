@@ -3,7 +3,7 @@ import { Square } from "../Square/Square";
 import { PropTypes } from "prop-types";
 import styled from "styled-components";
 
-const BoardContainer = styled.div`
+const StyledBoard = styled.div`
   display: grid;
   grid-template-columns: repeat(${props => props.boardW}, 1fr);
   grid-template-rows: repeat(${props => props.boardH}, 1fr);
@@ -34,9 +34,9 @@ export class Board extends React.Component {
   render() {
     const { boardW, boardH } = this.props;
     return (
-      <BoardContainer boardW={boardW} boardH={boardH}>
+      <StyledBoard boardW={boardW} boardH={boardH}>
         {this.renderRows(boardW, boardH)}
-      </BoardContainer>
+      </StyledBoard>
     );
   }
 }
