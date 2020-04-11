@@ -99,7 +99,7 @@ export class Game extends React.Component {
     if (winner) {
       status = "Выиграл " + winner;
     } else if (this.state.activeStep === boardH * boardW) {
-      status = "Игра закончилась вничью";
+      status = "Игра окончилась вничью";
     } else {
       status = "Следующий ход: " + (this.state.xIsNext ? "X" : "O");
     }
