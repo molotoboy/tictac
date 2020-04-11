@@ -2,8 +2,16 @@ import React from "react";
 import calculateWinner from "../../calculateWinner";
 import { Board } from "../Board/Board";
 import MoveList from "../MoveList/MoveList";
-import styles from "./Game.module.css";
+import styled from "styled-components";
 
+const GameStyled = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+const BoardStyled = styled.div``;
+const InfoStyled = styled.div`
+  margin-left: 20px;
+`;
 export class Game extends React.Component {
   constructor(props) {
     super(props);
@@ -91,8 +99,8 @@ export class Game extends React.Component {
       status = "Следующий ход: " + (this.state.xIsNext ? "X" : "O");
     }
     return (
-      <div className={styles.Game}>
-        <div className={styles.Game__board}>
+      <GameStyled>
+        <BoardStyled>
           <Board
             boardW={boardW}
             boardH={boardH}
@@ -101,8 +109,8 @@ export class Game extends React.Component {
             activeSquare={current.position}
             winnerPositions={winnerPositions}
           />
-        </div>
-        <div className={styles.Game__info}>
+        </BoardStyled>
+        <InfoStyled>
           <h2>{status}</h2>
           <MoveList
             history={history}
@@ -111,8 +119,8 @@ export class Game extends React.Component {
             jumpToMoveHandler={this.jumpTo}
             activeStep={this.state.activeStep}
           />
-        </div>
-      </div>
+        </InfoStyled>
+      </GameStyled>
     );
   }
 }
