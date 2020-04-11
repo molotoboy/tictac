@@ -4,13 +4,18 @@ import { Board } from "../Board/Board";
 import MoveList from "../MoveList/MoveList";
 import styled from "styled-components";
 
-const GameStyled = styled.div`
+const StyledGame = styled.div`
   display: flex;
   flex-direction: row;
 `;
-const BoardStyled = styled.div``;
-const InfoStyled = styled.div`
-  margin-left: 20px;
+const StyledBoard = styled.div``;
+const StyledInfo = styled.div`
+  margin-left: 2rem;
+  h2 {
+    color: red;
+    margin: 0;
+    padding: 0;
+  }
 `;
 export class Game extends React.Component {
   constructor(props) {
@@ -99,8 +104,8 @@ export class Game extends React.Component {
       status = "Следующий ход: " + (this.state.xIsNext ? "X" : "O");
     }
     return (
-      <GameStyled>
-        <BoardStyled>
+      <StyledGame>
+        <StyledBoard>
           <Board
             boardW={boardW}
             boardH={boardH}
@@ -109,8 +114,8 @@ export class Game extends React.Component {
             activeSquare={current.position}
             winnerPositions={winnerPositions}
           />
-        </BoardStyled>
-        <InfoStyled>
+        </StyledBoard>
+        <StyledInfo>
           <h2>{status}</h2>
           <MoveList
             history={history}
@@ -119,8 +124,8 @@ export class Game extends React.Component {
             jumpToMoveHandler={this.jumpTo}
             activeStep={this.state.activeStep}
           />
-        </InfoStyled>
-      </GameStyled>
+        </StyledInfo>
+      </StyledGame>
     );
   }
 }
