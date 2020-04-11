@@ -1,7 +1,13 @@
 import React from "react";
 import { Square } from "../Square/Square";
 import { PropTypes } from "prop-types";
-import styles from "./Board.module.css";
+import styled from "styled-components";
+
+const BoardContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(${props => props.boardW}, 1fr);
+  grid-template-rows: repeat(${props => props.boardH}, 1fr);
+`;
 
 export class Board extends React.Component {
   renderSquare(i) {
@@ -28,7 +34,9 @@ export class Board extends React.Component {
   render() {
     const { boardW, boardH } = this.props;
     return (
-      <div className={styles.Board}>{this.renderRows(boardW, boardH)}</div>
+      <BoardContainer boardW={boardW} boardH={boardH}>
+        {this.renderRows(boardW, boardH)}
+      </BoardContainer>
     );
   }
 }
