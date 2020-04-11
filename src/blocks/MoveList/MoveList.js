@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const StyledMoveList = styled.div``;
 const StyledItem = styled.div`
-  background-color: ${props => (props.activeStep ? "coral" : "#fff")};
+  background-color: ${props => (props.active ? "coral" : "#fff")};
 `;
 
 export default function MoveList({
@@ -19,16 +19,15 @@ export default function MoveList({
         {history.map((step, move) => (
           <li key={move}>
             <StyledItem
-              activeStep={activeStep === move}
+              active={activeStep === move}
               onClick={() => jumpToMoveHandler(move)}
             >
               {move
-                ? "Перейти к ходу #" +
-                  move +
-                  " " +
+                ? "ход " +
                   (move % 2 ? "X" : "O") +
+                  " " +
                   positionToString(step.position, boardW, boardH)
-                : "К началу игры"}
+                : "Старт"}
             </StyledItem>
           </li>
         ))}
