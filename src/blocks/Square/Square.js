@@ -1,19 +1,36 @@
 import React from "react";
 import PropTypes from "prop-types";
-import styles from "./Square.module.css";
+import styled from "styled-components";
+
+const StyledSquare = styled.div`
+  border: 1px solid #999;
+  float: left;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 34px;
+  height: 34px;
+  width: 34px;
+  padding: 0;
+  text-align: center;
+  user-select: none;
+
+  background-color: ${props => (props.activeSquare ? "coral" : "#fff")};
+  &:focus {
+    outline: none;
+  }
+  &:hover {
+    border: 1px solid red;
+  }
+`;
 
 export function Square(props) {
   return (
-    <button
-      className={
-        props.activeSquare
-          ? `${styles.Square} ${styles.Square_active}`
-          : styles.Square
-      }
+    <StyledSquare
+      activeSquare={props.activeSquare}
       onClick={props.squareClickHandler}
     >
       {props.value}
-    </button>
+    </StyledSquare>
   );
 }
 Square.propTypes = {
