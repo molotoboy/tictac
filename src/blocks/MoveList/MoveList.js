@@ -3,7 +3,12 @@ import styled from "styled-components";
 
 const StyledMoveList = styled.div``;
 const StyledItem = styled.div`
+  user-select: none;
+  cursor: pointer;
   background-color: ${props => (props.active ? "coral" : "#fff")};
+  &:hover {
+    color: #7d1907;
+  }
 `;
 
 export default function MoveList({
