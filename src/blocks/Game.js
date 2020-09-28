@@ -1,7 +1,7 @@
 import React from "react";
-import calculateWinner from "../../calculateWinner";
-import { Board } from "../Board/Board";
-import MoveList from "../MoveList/MoveList";
+import calculateWinner from "../calculateWinner";
+import { Board } from "./Board";
+import MoveList from "./MoveList";
 import styled from "styled-components";
 
 const StyledGame = styled.div`
