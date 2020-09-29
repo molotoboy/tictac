@@ -7,9 +7,10 @@ import styled from "@emotion/styled";
 const StyledGame = styled.div`
   display: flex;
   flex-direction: row;
+  label: Game;
 `;
-const StyledBoard = styled.div``;
 const StyledInfo = styled.div`
+  label: Info;
   margin-left: 2rem;
   h2 {
     color: red;
@@ -105,7 +106,7 @@ export class Game extends React.Component {
     }
     return (
       <StyledGame>
-        <StyledBoard>
+        <div>
           <Board
             boardW={boardW}
             boardH={boardH}
@@ -114,7 +115,7 @@ export class Game extends React.Component {
             activeSquare={current.position}
             winnerPositions={winnerPositions}
           />
-        </StyledBoard>
+        </div>
         <StyledInfo>
           <h2>{status}</h2>
           <MoveList

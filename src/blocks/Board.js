@@ -7,6 +7,7 @@ const StyledBoard = styled.div`
   display: grid;
   grid-template-columns: repeat(${props => props.boardW}, 1fr);
   grid-template-rows: repeat(${props => props.boardH}, 1fr);
+  label: Board;
 `;
 
 export class Board extends React.Component {
