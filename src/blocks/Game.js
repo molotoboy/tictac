@@ -2,7 +2,7 @@ import React from "react";
 import calculateWinner from "../calculateWinner";
 import { Board } from "./Board";
 import MoveList from "./MoveList";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 
 const StyledGame = styled.div`
   display: flex;

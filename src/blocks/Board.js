@@ -1,7 +1,7 @@
 import React from "react";
 import { Square } from "./Square";
 import { PropTypes } from "prop-types";
-import styled from "styled-components";
+import styled from "@emotion/styled";
 
 const StyledBoard = styled.div`
   display: grid;
