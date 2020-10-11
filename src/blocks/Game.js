@@ -1,16 +1,14 @@
 import React from "react";
-import calculateWinner from "../calculateWinner";
+import calculateWinner from "../game/calculateWinner";
 import { Board } from "./Board";
 import MoveList from "./MoveList";
-import styled from "@emotion/styled";
+import styled from "@emotion/styled/macro";
 
 const StyledGame = styled.div`
   display: flex;
   flex-direction: row;
-  label: Game;
 `;
 const StyledInfo = styled.div`
-  label: Info;
   margin-left: 2rem;
   h2 {
     color: red;

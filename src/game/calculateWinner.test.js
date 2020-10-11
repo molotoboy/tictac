@@ -1,4 +1,4 @@
-import calculateWinner from "../calculateWinner";
+import calculateWinner from "./calculateWinner";
 
 test("should NO win on empty", () => {
   expect(calculateWinner([])).toEqual([]);

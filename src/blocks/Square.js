@@ -1,9 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
-import styled from "@emotion/styled";
+import styled from "@emotion/styled/macro";
 
 const StyledSquare = styled.div`
-  label: Square;
   border: 1px solid #999;
   float: left;
   font-size: 24px;

@@ -1,5 +1,14 @@
 {
   "plugins": [
-    "emotion"
+    [
+      "emotion",
+      {
+        // sourceMap is on by default but source maps are dead code eliminated in production
+        "sourceMap": false,
+        "autoLabel": true, //process.env.NODE_ENV !== 'production',
+        "labelFormat": "[local]",
+        "cssPropOptimization": true
+      }
+    ]
   ]
 }
