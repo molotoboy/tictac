@@ -27,9 +27,7 @@ console.log(locateSquare([2, 2], boardConfig));
 function makeSequence(point, direction, boardConfig) {
   const [x, y] = point;
   const [dx, dy] = direction;
-  const boardW = boardConfig.boardW;
-  const boardH = boardConfig.boardH;
-  const goal = boardConfig.goal;
+  const { boardW, boardH, goal } = boardConfig;
 
   const xg = x + dx * (goal - 1);
   // console.log(xg);
