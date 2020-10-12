@@ -13,7 +13,7 @@ export function nextMove(player, board) {
   if (boardH <= 0 || boardW <= 0) {
     throw "Wrong board size";
   }
-  const bestMove = [1, 1];
+  let bestMove = [1, 1];
 
   let { opportunities, squareRating } = board;
 
@@ -25,7 +25,34 @@ export function nextMove(player, board) {
     squareRating = makeSquareRating(board);
   }
 
+  let maxRate = 0;
+  let mapSquareRating = new Map();
+  for (let i = 0; i < boardLen; i++) {
+    let prev = mapSquareRating.get(squareRating[i]);
+    if (squareRating[i] > maxRate) maxRate = squareRating[i];
+    if (prev) {
+      prev = [...prev, i];
+    } else {
+      prev = [i];
+    }
+    mapSquareRating.set(squareRating[i], prev);
+  }
+
+  const mapSort = new Map(
+    [...mapSquareRating.entries()].sort((a, b) => b[0] - a[0])
+  );
+  const flatArr = [...mapSort.entries()].map(([a, b]) => b).flatMap(a => a);
+
+  bestMove = [
+    flatArr[0] % boardW,
+    (flatArr[0] - (flatArr[0] % boardW)) / boardW
+  ];
   return bestMove;
+}
+
+function locateSquare(point, boardConfig) {
+  const [x, y] = point;
+  return x + y * boardConfig.boardH;
 }
 
 function makeSequence(point, direction, board) {
@@ -47,14 +74,26 @@ function makeSequence(point, direction, board) {
   return sequence;
 }
 
+/**
+ * @description fill sequences for win
+ * @param {*} board
+ */
+
 function makeOpportunities(board) {
   const { boardW, boardH } = board;
 
+  const directions = [
+    [1, 0],
+    [1, 1],
+    [0, 1],
+    [-1, 1]
+  ];
+
   let opportunities = [
     {
-      sequence: [],
-      players: [0, 0],
-      status: null
+      sequence: [], // sequences to win
+      players: [0, 0], // number of occupied cells by 2 players[1player, 2player]
+      status: null //
     }
   ];
 

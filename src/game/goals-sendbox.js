@@ -85,3 +85,27 @@ for (let i = 0; i < boardConfig.boardH * boardConfig.boardW; i++) {
 }
 
 console.log(squareRating);
+
+const { squares, boardH, boardW, goal } = board;
+const boardLen = boardW * boardH;
+
+let maxRate = 0;
+let mapSquareRating = new Map();
+for (let i = 0; i < boardLen; i++) {
+  let prev = mapSquareRating.get(squareRating[i]);
+  if (squareRating[i] > maxRate) maxRate = squareRating[i];
+  if (prev) {
+    prev = [...prev, i];
+  } else {
+    prev = [i];
+  }
+  console.log(prev, maxRate);
+  mapSquareRating.set(squareRating[i], prev);
+}
+console.log(mapSquareRating);
+const mapSort = new Map(
+  [...mapSquareRating.entries()].sort((a, b) => b[0] - a[0])
+);
+const flatArr = [...mapSort.entries()].map(([a, b]) => b).flatMap(a => a);
+console.log(mapSort);
+console.log(flatArr);
