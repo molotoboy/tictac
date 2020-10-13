@@ -43,18 +43,41 @@ export function nextMove(player, board) {
   );
   const flatArr = [...mapSort.entries()].map(([a, b]) => b).flatMap(a => a);
 
-  bestMove = [
-    flatArr[0] % boardW,
-    (flatArr[0] - (flatArr[0] % boardW)) / boardW
-  ];
+  bestMove = locateSquareByNumber(flatArr[0], board);
+
   return bestMove;
 }
 
-function locateSquare(point, boardConfig) {
-  const [x, y] = point;
-  return x + y * boardConfig.boardH;
+/**
+ * @description convert number of cell to array coordinates
+ * @param {number} numberCell of cell on board
+ * @param {*} board board config {boardW, boardH, goal}
+ * @returns {[number,number]} point array coordinates
+ */
+function locateSquareByNumber(numberCell, board) {
+  const x = numberCell % board.boardW;
+  const y = (numberCell - x) / board.boardW;
+  return [x, y];
 }
 
+/**
+ * @description convert array coordinates to number of cell
+ * @param {[number,number]} point array coordinates
+ * @param {*} board board config {boardW, boardH, goal}
+ * @returns {number} number of cell on board
+ */
+function locateSquareByArray(point, board) {
+  const [x, y] = point;
+  return x + y * board.boardW;
+}
+
+/**
+ * @description make single sequence from point to direction
+ * @param {[number,number]} point start point of sequence
+ * @param {*} direction direction of sequence
+ * @param {*} board board config {boardW, boardH, goal}
+ * @returns {[number]} sequence of win cells numbers
+ */
 function makeSequence(point, direction, board) {
   const [x, y] = point;
   const [dx, dy] = direction;
@@ -69,14 +92,14 @@ function makeSequence(point, direction, board) {
   let sequence = [];
   for (let i = 0; i < goal; i++) {
     const curPoint = [x + dx * i, y + dy * i];
-    sequence.push(locateSquare(curPoint, board));
+    sequence.push(locateSquareByArray(curPoint, board));
   }
   return sequence;
 }
 
 /**
- * @description fill sequences for win
- * @param {*} board
+ * @description fill sequences win cells numbers
+ * @param {*} board board config {boardW, boardH, goal}
  */
 
 function makeOpportunities(board) {
@@ -103,7 +126,6 @@ function makeOpportunities(board) {
         const s = makeSequence([x, y], dir, board);
         if (s) {
           opportunities.push({ sequence: s, players: [0, 0], status: null });
-          console.log([x, y], dir, s);
         }
       }
     }
