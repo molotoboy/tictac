@@ -72,9 +72,9 @@ function locateSquareByArray(point, board) {
 }
 
 /**
- * @description make single sequence from point to direction
+ * make single sequence from point to direction
  * @param {[number,number]} point start point of sequence
- * @param {*} direction direction of sequence
+ * @param {[number,number]} direction direction of sequence
  * @param {*} board board config {boardW, boardH, goal}
  * @returns {[number]} sequence of win cells numbers
  */
@@ -98,8 +98,13 @@ function makeSequence(point, direction, board) {
 }
 
 /**
- * @description fill sequences win cells numbers
+ * fill sequences win cells numbers
  * @param {*} board board config {boardW, boardH, goal}
+ * @return {{
+    sequence: any[];
+    occupied: [number,number]; 
+    status: any;
+    }[] } array of win sequences, with occupied cells by 2 players and status? ?(open,closed) or (null,0,1pl,2pl)?
  */
 
 function makeOpportunities(board) {
@@ -115,7 +120,7 @@ function makeOpportunities(board) {
   let opportunities = [
     {
       sequence: [], // sequences to win
-      players: [0, 0], // number of occupied cells by 2 players[1player, 2player]
+      occupied: [0, 0], // number of occupied cells by 2 players[1player, 2player]
       status: null //
     }
   ];
@@ -131,11 +136,13 @@ function makeOpportunities(board) {
     }
   }
 
-  console.log(opportunities);
-
   return opportunities;
 }
-
+/**
+ * calculate rating of cells
+ * @param {*} board
+ * @returns {[number]} array of cells ratings (number of win rows on cell)
+ */
 function makeSquareRating(board) {
   const { boardW, boardH } = board;
   const boardLen = boardW * boardH;
@@ -157,8 +164,5 @@ function makeSquareRating(board) {
       }
     });
   }
-
-  console.log(squareRating);
-
   return squareRating;
 }
