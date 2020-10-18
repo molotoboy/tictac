@@ -1,7 +1,11 @@
-import { number } from "prop-types";
-
-export function nextMove(player, board) {
-  const { squares, boardH, boardW, goal } = board;
+/**
+ * return coordinate to make move
+ * @param {*} player
+ * @param {[number]} squares array of cells on board
+ * @param {*} boardConfig
+ */
+export function nextMove(player, squares, boardConfig) {
+  const { boardH, boardW, goal } = boardConfig;
   const boardLen = boardW * boardH;
 
   if (squares.length !== boardLen) {
@@ -13,29 +17,30 @@ export function nextMove(player, board) {
   if (boardH <= 0 || boardW <= 0) {
     throw "Wrong board size";
   }
-  let bestMove = [1, 1];
+  let bestMove = 0; //[1, 1];
 
-  let { opportunities, squareRating } = board;
+  let { opportunities, squareRating } = boardConfig;
 
   if (!opportunities) {
-    opportunities = makeOpportunities(board);
+    opportunities = makeOpportunities(boardConfig);
   }
 
   if (!squareRating) {
-    squareRating = makeSquareRating(board);
+    squareRating = makeSquareRating(boardConfig);
   }
 
   let maxRate = 0;
   let mapSquareRating = new Map();
   for (let i = 0; i < boardLen; i++) {
     let prev = mapSquareRating.get(squareRating[i]);
+    let next;
     if (squareRating[i] > maxRate) maxRate = squareRating[i];
     if (prev) {
-      prev = [...prev, i];
+      next = [...prev, i];
     } else {
-      prev = [i];
+      next = [i];
     }
-    mapSquareRating.set(squareRating[i], prev);
+    mapSquareRating.set(squareRating[i], next);
   }
 
   const mapSort = new Map(
@@ -43,45 +48,46 @@ export function nextMove(player, board) {
   );
   const flatArr = [...mapSort.entries()].map(([a, b]) => b).flatMap(a => a);
 
-  bestMove = locateSquareByNumber(flatArr[0], board);
+  //bestMove = locateSquareByNumber(flatArr[0], boardConfig);
+  bestMove = flatArr[0];
 
   return bestMove;
 }
 
 /**
- * @description convert number of cell to array coordinates
+ * convert number of cell to array coordinates
  * @param {number} numberCell of cell on board
- * @param {*} board board config {boardW, boardH, goal}
+ * @param {*} boardConfig board config {boardW, boardH, goal}
  * @returns {[number,number]} point array coordinates
  */
-function locateSquareByNumber(numberCell, board) {
-  const x = numberCell % board.boardW;
-  const y = (numberCell - x) / board.boardW;
+function locateSquareByNumber(numberCell, boardConfig) {
+  const x = numberCell % boardConfig.boardW;
+  const y = (numberCell - x) / boardConfig.boardW;
   return [x, y];
 }
 
 /**
- * @description convert array coordinates to number of cell
+ * convert array coordinates to number of cell
  * @param {[number,number]} point array coordinates
- * @param {*} board board config {boardW, boardH, goal}
+ * @param {*} boardConfig board config {boardW, boardH, goal}
  * @returns {number} number of cell on board
  */
-function locateSquareByArray(point, board) {
+function locateSquareByArray(point, boardConfig) {
   const [x, y] = point;
-  return x + y * board.boardW;
+  return x + y * boardConfig.boardW;
 }
 
 /**
  * make single sequence from point to direction
  * @param {[number,number]} point start point of sequence
  * @param {[number,number]} direction direction of sequence
- * @param {*} board board config {boardW, boardH, goal}
+ * @param {*} boardConfig board config {boardW, boardH, goal}
  * @returns {[number]} sequence of win cells numbers
  */
-function makeSequence(point, direction, board) {
+function makeSequence(point, direction, boardConfig) {
   const [x, y] = point;
   const [dx, dy] = direction;
-  const { boardW, boardH, goal } = board;
+  const { boardW, boardH, goal } = boardConfig;
 
   const xg = x + dx * (goal - 1);
   const yg = y + dy * (goal - 1);
@@ -92,23 +98,22 @@ function makeSequence(point, direction, board) {
   let sequence = [];
   for (let i = 0; i < goal; i++) {
     const curPoint = [x + dx * i, y + dy * i];
-    sequence.push(locateSquareByArray(curPoint, board));
+    sequence.push(locateSquareByArray(curPoint, boardConfig));
   }
   return sequence;
 }
 
 /**
  * fill sequences win cells numbers
- * @param {*} board board config {boardW, boardH, goal}
+ * @param {*} boardConfig board config {boardW, boardH, goal}
  * @return {{
     sequence: any[];
     occupied: [number,number]; 
     status: any;
     }[] } array of win sequences, with occupied cells by 2 players and status? ?(open,closed) or (null,0,1pl,2pl)?
  */
-
-function makeOpportunities(board) {
-  const { boardW, boardH } = board;
+function makeOpportunities(boardConfig) {
+  const { boardW, boardH } = boardConfig;
 
   const directions = [
     [1, 0],
@@ -128,9 +133,9 @@ function makeOpportunities(board) {
   for (let y = 0; y < boardH; y++) {
     for (let x = 0; x < boardW; x++) {
       for (const dir of directions) {
-        const s = makeSequence([x, y], dir, board);
+        const s = makeSequence([x, y], dir, boardConfig);
         if (s) {
-          opportunities.push({ sequence: s, players: [0, 0], status: null });
+          opportunities.push({ sequence: s, occupied: [0, 0], status: null });
         }
       }
     }
@@ -138,6 +143,7 @@ function makeOpportunities(board) {
 
   return opportunities;
 }
+
 /**
  * calculate rating of cells
  * @param {*} board

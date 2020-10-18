@@ -20,9 +20,11 @@ export class Game extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      boardW: 6,
-      boardH: 6,
-      goal: 5,
+      boardConfig: {
+        boardW: 6,
+        boardH: 6,
+        goal: 5
+      },
       history: [
         {
           squares: [],
@@ -35,9 +37,9 @@ export class Game extends React.Component {
     };
     // console.log(this.state);
     this.state.history[0].squares.length =
-      this.state.boardW * this.state.boardH;
+      this.state.boardConfig.boardW * this.state.boardConfig.boardH;
     this.state.history[0].squares.fill(null);
-    this.state.winnerPositions.length = this.state.goal;
+    this.state.winnerPositions.length = this.state.boardConfig.goal;
     this.state.winnerPositions.fill(null);
   }
   jumpTo = step => {
@@ -47,7 +49,7 @@ export class Game extends React.Component {
     });
   };
   squareClickHandler = i => {
-    const { boardW, boardH, goal } = this.state;
+    const { boardW, boardH, goal } = this.state.boardConfig;
     const history = this.state.history.slice(0, this.state.activeStep + 1);
     const current = history[history.length - 1];
     const squares = current.squares.slice();
@@ -80,7 +82,7 @@ export class Game extends React.Component {
   };
 
   render() {
-    const { boardH, boardW, goal } = this.state;
+    const { boardH, boardW, goal } = this.state.boardConfig;
     const history = this.state.history;
     const current = history[this.state.activeStep];
     const winnerPositions = calculateWinner(
