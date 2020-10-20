@@ -1,5 +1,6 @@
 import React from "react";
 import calculateWinner from "../game/calculateWinner";
+import { nextMove } from "../game/nextMove";
 import { Board } from "./Board";
 import MoveList from "./MoveList";
 import styled from "@emotion/styled/macro";
@@ -21,9 +22,9 @@ export class Game extends React.Component {
     super(props);
     this.state = {
       boardConfig: {
-        boardW: 6,
-        boardH: 6,
-        goal: 5
+        boardW: 3,
+        boardH: 3,
+        goal: 3
       },
       history: [
         {
@@ -33,7 +34,7 @@ export class Game extends React.Component {
       ],
       winnerPositions: [],
       activeStep: 0,
-      xIsNext: true
+      nextPlayer: 0
     };
     // console.log(this.state);
     this.state.history[0].squares.length =
@@ -45,7 +46,7 @@ export class Game extends React.Component {
   jumpTo = step => {
     this.setState({
       activeStep: step,
-      xIsNext: step % 2 === 0
+      nextPlayer: step % 2
     });
   };
   squareClickHandler = i => {
@@ -68,7 +69,7 @@ export class Game extends React.Component {
         winnerPositions: winnerPositions
       });
     }
-    squares[i] = this.state.xIsNext ? "X" : "O";
+    squares[i] = this.state.nextPlayer ? "O" : "X";
     this.setState({
       history: history.concat([
         {
@@ -77,7 +78,7 @@ export class Game extends React.Component {
         }
       ]),
       activeStep: history.length,
-      xIsNext: !this.state.xIsNext
+      nextPlayer: (this.state.nextPlayer + 1) % 2
     });
   };
 
@@ -95,6 +96,12 @@ export class Game extends React.Component {
     if (winnerPositions) {
       winner = current.squares[winnerPositions[0]];
     }
+    console.log(this.state);
+    let nextMoveCell = nextMove(
+      this.state.nextPlayer,
+      current.squares,
+      this.state.boardConfig
+    );
 
     let status;
     if (winner) {
@@ -102,7 +109,7 @@ export class Game extends React.Component {
     } else if (this.state.activeStep === boardH * boardW) {
       status = "Ничья";
     } else {
-      status = "Следующий ход: " + (this.state.xIsNext ? "X" : "O");
+      status = "Следующий ход: " + (this.state.nextPlayer ? "O" : "X");
     }
     return (
       <StyledGame>

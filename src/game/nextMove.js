@@ -1,6 +1,8 @@
+const players = ["O", "X"];
+
 /**
  * return coordinate to make move
- * @param {*} player
+ * @param {number} player
  * @param {[number]} squares array of cells on board
  * @param {*} boardConfig
  */
@@ -22,11 +24,16 @@ export function nextMove(player, squares, boardConfig) {
   let { opportunities, squareRating } = boardConfig;
 
   if (!opportunities) {
-    opportunities = makeOpportunities(boardConfig);
+    opportunities = makeOpportunities(squares, boardConfig);
   }
 
   if (!squareRating) {
-    squareRating = makeSquareRating(boardConfig);
+    squareRating = makeSquareRating(
+      player,
+      opportunities,
+      squares,
+      boardConfig
+    );
   }
 
   let maxRate = 0;
@@ -106,15 +113,17 @@ function makeSequence(point, direction, boardConfig) {
 /**
  * fill sequences win cells numbers
  * @param {*} boardConfig board config {boardW, boardH, goal}
+ * @param {any[]} squares occupied by players cells on board
  * @return {{
     sequence: any[];
     occupied: [number,number]; 
     status: any;
     }[] } array of win sequences, with occupied cells by 2 players and status? ?(open,closed) or (null,0,1pl,2pl)?
  */
-function makeOpportunities(boardConfig) {
+function makeOpportunities(squares, boardConfig) {
   const { boardW, boardH } = boardConfig;
 
+  const players = ["O", "X"];
   const directions = [
     [1, 0],
     [1, 1],
@@ -122,53 +131,82 @@ function makeOpportunities(boardConfig) {
     [-1, 1]
   ];
 
-  let opportunities = [
-    {
-      sequence: [], // sequences to win
-      occupied: [0, 0], // number of occupied cells by 2 players[1player, 2player]
-      status: null //
-    }
-  ];
+  let opportunities = [];
+  // [
+  //   {
+  //     sequence: [], // sequences to win
+  //     occupied: [0, 0], // number of occupied cells by 2 players[1player, 2player]
+  //     status: null //
+  //   }
+  // ];
 
   for (let y = 0; y < boardH; y++) {
     for (let x = 0; x < boardW; x++) {
       for (const dir of directions) {
         const s = makeSequence([x, y], dir, boardConfig);
         if (s) {
-          opportunities.push({ sequence: s, occupied: [0, 0], status: null });
+          let newSequence = { sequence: s, occupied: [0, 0], status: null };
+          for (const cellNumber of s) {
+            if (squares[cellNumber]) {
+              const player = players.indexOf(squares[cellNumber]);
+              if (player > -1) {
+                newSequence.occupied[player]++;
+                if (newSequence.status === null) {
+                  newSequence.status = player;
+                } else {
+                  if (newSequence.status !== player) {
+                    newSequence.status = -1;
+                  }
+                }
+              }
+            }
+          }
+          opportunities.push(newSequence);
         }
       }
     }
   }
-
+  console.log(opportunities);
   return opportunities;
 }
 
 /**
  * calculate rating of cells
- * @param {*} board
+ * @param {number} player number of player (0 or 1)
+ * @param {*} opportunities array of win sequences
+ * @param {*} squares array of cells
+ * @param {*} boardConfig
  * @returns {[number]} array of cells ratings (number of win rows on cell)
  */
-function makeSquareRating(board) {
-  const { boardW, boardH } = board;
+function makeSquareRating(player, opportunities, squares, boardConfig) {
+  const { boardW, boardH } = boardConfig;
   const boardLen = boardW * boardH;
 
-  let { opportunities } = board;
-
-  if (!opportunities) {
-    opportunities = makeOpportunities(board);
+  if (player === null) {
+    throw "player is absent";
   }
 
   let squareRating = [];
   squareRating.length = boardLen;
   squareRating.fill(0);
 
+  const otherPlayer = (player + 1) % 2;
+
   for (let i = 0; i < boardH * boardW; i++) {
-    opportunities.forEach(o => {
-      if (o.sequence.includes(i)) {
-        squareRating[i]++;
-      }
-    });
+    if (squares[i] === null) {
+      opportunities.forEach(o => {
+        if (squares[i] === null) {
+          if (o.sequence.includes(i)) {
+            if (o.status === null) squareRating[i] += 1;
+            if (o.status === player)
+              squareRating[i] += o.occupied[player] * boardConfig.goal * 3;
+            if (o.status === otherPlayer)
+              squareRating[i] += o.occupied[otherPlayer] * boardConfig.goal * 2;
+          }
+        }
+      });
+    }
   }
+  console.log(squareRating);
   return squareRating;
 }
