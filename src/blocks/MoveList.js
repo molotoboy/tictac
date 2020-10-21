@@ -16,7 +16,8 @@ export default function MoveList({
   boardW,
   boardH,
   jumpToMoveHandler,
-  activeStep
+  activeStep,
+  players
 }) {
   return (
     <StyledMoveList>
@@ -29,7 +30,7 @@ export default function MoveList({
             >
               {move
                 ? "ход " +
-                  (move % 2 ? "X" : "O") +
+                  players[(move + 1) % 2] +
                   " " +
                   positionToString(step.position, boardW, boardH)
                 : "Старт"}

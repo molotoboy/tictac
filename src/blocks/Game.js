@@ -24,7 +24,8 @@ export class Game extends React.Component {
       boardConfig: {
         boardW: 3,
         boardH: 3,
-        goal: 3
+        goal: 3,
+        players: ["O", "X"]
       },
       history: [
         {
@@ -69,7 +70,7 @@ export class Game extends React.Component {
         winnerPositions: winnerPositions
       });
     }
-    squares[i] = this.state.nextPlayer ? "O" : "X";
+    squares[i] = this.state.boardConfig.players[this.state.nextPlayer];
     this.setState({
       history: history.concat([
         {
@@ -109,7 +110,9 @@ export class Game extends React.Component {
     } else if (this.state.activeStep === boardH * boardW) {
       status = "Ничья";
     } else {
-      status = "Следующий ход: " + (this.state.nextPlayer ? "O" : "X");
+      status =
+        "Следующий ход: " +
+        this.state.boardConfig.players[this.state.nextPlayer];
     }
     return (
       <StyledGame>
@@ -131,6 +134,7 @@ export class Game extends React.Component {
             boardH={boardH}
             jumpToMoveHandler={this.jumpTo}
             activeStep={this.state.activeStep}
+            players={this.state.boardConfig.players}
           />
         </StyledInfo>
       </StyledGame>

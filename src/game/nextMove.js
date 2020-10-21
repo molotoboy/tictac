@@ -1,5 +1,3 @@
-const players = ["O", "X"];
-
 /**
  * return coordinate to make move
  * @param {number} player
@@ -121,9 +119,8 @@ function makeSequence(point, direction, boardConfig) {
     }[] } array of win sequences, with occupied cells by 2 players and status? ?(open,closed) or (null,0,1pl,2pl)?
  */
 function makeOpportunities(squares, boardConfig) {
-  const { boardW, boardH } = boardConfig;
+  const { boardW, boardH, players } = boardConfig;
 
-  const players = ["O", "X"];
   const directions = [
     [1, 0],
     [1, 1],
@@ -194,17 +191,15 @@ function makeSquareRating(player, opportunities, squares, boardConfig) {
 
   for (let i = 0; i < boardH * boardW; i++) {
     if (squares[i] === null) {
-      opportunities.forEach(o => {
-        if (squares[i] === null) {
-          if (o.sequence.includes(i)) {
-            if (o.status === null) squareRating[i] += 1;
-            if (o.status === player)
-              squareRating[i] += o.occupied[player] * boardConfig.goal * 3;
-            if (o.status === otherPlayer)
-              squareRating[i] += o.occupied[otherPlayer] * boardConfig.goal * 2;
-          }
-        }
-      });
+      opportunities
+        .filter(o => o.sequence.includes(i))
+        .forEach(o => {
+          if (o.status === null || o.status === -1) squareRating[i] += 1;
+          if (o.status === player)
+            squareRating[i] += o.occupied[player] * boardConfig.goal * 3;
+          if (o.status === otherPlayer)
+            squareRating[i] += o.occupied[otherPlayer] * boardConfig.goal * 2;
+        });
     }
   }
   console.log(squareRating);
