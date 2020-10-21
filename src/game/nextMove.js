@@ -116,7 +116,7 @@ function makeSequence(point, direction, boardConfig) {
     sequence: any[];
     occupied: [number,number]; 
     status: any;
-    }[] } array of win sequences, with occupied cells by 2 players and status? ?(open,closed) or (null,0,1pl,2pl)?
+    }[] } array of win sequences, with occupied cells by 2 players and status (-1,null,0,1)
  */
 function makeOpportunities(squares, boardConfig) {
   const { boardW, boardH, players } = boardConfig;
