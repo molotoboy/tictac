@@ -98,7 +98,7 @@ export class Game extends React.Component {
       winner = current.squares[winnerPositions[0]];
     }
     console.log(this.state);
-    let nextMoveCell = nextMove(
+    const squareRating = nextMove(
       this.state.nextPlayer,
       current.squares,
       this.state.boardConfig
@@ -124,6 +124,7 @@ export class Game extends React.Component {
             squareClickHandler={this.squareClickHandler}
             activeSquare={current.position}
             winnerPositions={winnerPositions}
+            squareRating={squareRating}
           />
         </div>
         <StyledInfo>

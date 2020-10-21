@@ -17,7 +17,7 @@ export function nextMove(player, squares, boardConfig) {
   if (boardH <= 0 || boardW <= 0) {
     throw "Wrong board size";
   }
-  let bestMove = 0; //[1, 1];
+  //let bestMove = 0; //[1, 1];
 
   let { opportunities, squareRating } = boardConfig;
 
@@ -51,12 +51,14 @@ export function nextMove(player, squares, boardConfig) {
   const mapSort = new Map(
     [...mapSquareRating.entries()].sort((a, b) => b[0] - a[0])
   );
-  const flatArr = [...mapSort.entries()].map(([a, b]) => b).flatMap(a => a);
+  const sortedSquareRating = [...mapSort.entries()]
+    .map(([a, b]) => b)
+    .flatMap(a => a);
 
   //bestMove = locateSquareByNumber(flatArr[0], boardConfig);
-  bestMove = flatArr[0];
+  //bestMove = flatArr[0];
 
-  return bestMove;
+  return { squareRating, sortedSquareRating };
 }
 
 /**

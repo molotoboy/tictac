@@ -10,32 +10,38 @@ const StyledBoard = styled.div`
 `;
 
 export class Board extends React.Component {
-  renderSquare(i) {
-    let winSquare = false;
+  renderSquare(i, squareRating, sortedSquareRating) {
+    let isWinSquare = false;
     if (this.props.winnerPositions) {
-      winSquare = this.props.winnerPositions.includes(i);
+      isWinSquare = this.props.winnerPositions.includes(i);
     }
     return (
       <Square
         key={i}
         value={this.props.squares[i]}
         squareClickHandler={() => this.props.squareClickHandler(i)}
-        activeSquare={this.props.activeSquare === i || winSquare}
+        activeSquare={this.props.activeSquare === i || isWinSquare}
+        squareRating={squareRating[i]}
+        sortedSquareRating={sortedSquareRating[0]}
       />
     );
   }
-  renderRows(boardW, boardH) {
+  renderRows(boardW, boardH, squareRating, sortedSquareRating) {
     const rows = [];
     for (let current = 0; current < boardH * boardW; current++) {
-      rows.push(this.renderSquare(current));
+      rows.push(this.renderSquare(current, squareRating, sortedSquareRating));
     }
     return rows;
   }
   render() {
-    const { boardW, boardH } = this.props;
+    const {
+      boardW,
+      boardH,
+      squareRating: { squareRating, sortedSquareRating }
+    } = this.props;
     return (
       <StyledBoard boardW={boardW} boardH={boardH}>
-        {this.renderRows(boardW, boardH)}
+        {this.renderRows(boardW, boardH, squareRating, sortedSquareRating)}
       </StyledBoard>
     );
   }
