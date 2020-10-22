@@ -5,8 +5,13 @@ import styled from "@emotion/styled/macro";
 const StyledSquare = styled.div`
   border: 1px solid #999;
   float: left;
-  font-size: ${props => (props.value ? "24px" : "14px")};
-  color: ${props => (props.value ? "green" : "black")};
+  font-size: ${props => (props.value ? "24px" : "20px")};
+  color: ${props =>
+    props.value
+      ? "black"
+      : props.sortedSquareRating === props.squareRating
+      ? "gold"
+      : "silver"};
   font-weight: bold;
   line-height: 34px;
   height: 34px;
@@ -29,6 +34,9 @@ export function Square(props) {
     <StyledSquare
       activeSquare={props.activeSquare}
       onClick={props.squareClickHandler}
+      value={props.value}
+      squareRating={props.squareRating}
+      sortedSquareRating={props.sortedSquareRating}
     >
       {props.value ?? props.squareRating}
     </StyledSquare>

@@ -57,7 +57,7 @@ export function nextMove(player, squares, boardConfig) {
 
   //bestMove = locateSquareByNumber(flatArr[0], boardConfig);
   //bestMove = flatArr[0];
-
+  console.log("sortedSquareRating ", sortedSquareRating);
   return { squareRating, sortedSquareRating };
 }
 
