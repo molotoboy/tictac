@@ -58,7 +58,7 @@ export function nextMove(player, squares, boardConfig) {
   //bestMove = locateSquareByNumber(flatArr[0], boardConfig);
   //bestMove = flatArr[0];
   console.log("sortedSquareRating ", sortedSquareRating);
-  return { squareRating, sortedSquareRating };
+  return { squareRating, sortedSquareRating, maxRate };
 }
 
 /**
@@ -196,7 +196,7 @@ function makeSquareRating(player, opportunities, squares, boardConfig) {
       opportunities
         .filter(o => o.sequence.includes(i))
         .forEach(o => {
-          if (o.status === null || o.status === -1) squareRating[i] += 1;
+          if (o.status === null) squareRating[i] += 1;
           if (o.status === player)
             squareRating[i] += o.occupied[player] * boardConfig.goal * 3;
           if (o.status === otherPlayer)

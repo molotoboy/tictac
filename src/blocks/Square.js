@@ -9,8 +9,8 @@ const StyledSquare = styled.div`
   color: ${props =>
     props.value
       ? "black"
-      : props.sortedSquareRating === props.squareRating
-      ? "gold"
+      : props.maxRate === props.squareRating
+      ? "coral"
       : "silver"};
   font-weight: bold;
   line-height: 34px;
@@ -36,7 +36,7 @@ export function Square(props) {
       onClick={props.squareClickHandler}
       value={props.value}
       squareRating={props.squareRating}
-      sortedSquareRating={props.sortedSquareRating}
+      maxRate={props.maxRate}
     >
       {props.value ?? props.squareRating}
     </StyledSquare>
