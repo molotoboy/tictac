@@ -22,9 +22,9 @@ export class Game extends React.Component {
     super(props);
     this.state = {
       boardConfig: {
-        boardW: 3,
-        boardH: 3,
-        goal: 3,
+        boardW: 10,
+        boardH: 10,
+        goal: 5,
         players: ["O", "X"]
       },
       history: [

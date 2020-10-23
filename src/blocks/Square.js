@@ -5,7 +5,7 @@ import styled from "@emotion/styled/macro";
 const StyledSquare = styled.div`
   border: 1px solid #999;
   float: left;
-  font-size: ${props => (props.value ? "24px" : "20px")};
+  font-size: ${props => (props.value ? "24px" : "18px")};
   color: ${props =>
     props.value
       ? "black"

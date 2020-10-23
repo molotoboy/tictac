@@ -190,7 +190,15 @@ function makeSquareRating(player, opportunities, squares, boardConfig) {
   squareRating.fill(0);
 
   const otherPlayer = (player + 1) % 2;
-
+  for (let pl = 0; pl <= 1; pl++) {
+    opportunities
+      .filter(o => o.occupied[pl] >= boardConfig.goal - 2 && o.status === pl)
+      .forEach(o =>
+        o.sequence
+          .filter(c => squares[c] === null)
+          .forEach(c => (squareRating[c] += 50 * o.occupied[pl]))
+      );
+  }
   for (let i = 0; i < boardH * boardW; i++) {
     if (squares[i] === null) {
       opportunities
@@ -198,9 +206,10 @@ function makeSquareRating(player, opportunities, squares, boardConfig) {
         .forEach(o => {
           if (o.status === null) squareRating[i] += 1;
           if (o.status === player)
-            squareRating[i] += o.occupied[player] * boardConfig.goal * 3;
+            squareRating[i] += o.occupied[player] * o.occupied[player] * 2;
           if (o.status === otherPlayer)
-            squareRating[i] += o.occupied[otherPlayer] * boardConfig.goal * 2;
+            squareRating[i] +=
+              o.occupied[otherPlayer] * o.occupied[otherPlayer] * 2;
         });
     }
   }
