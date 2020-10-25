@@ -7,6 +7,8 @@ const StyledBoard = styled.div`
   display: grid;
   grid-template-columns: repeat(${props => props.boardW}, 1fr);
   grid-template-rows: repeat(${props => props.boardH}, 1fr);
+  padding-left: 1rem;
+  padding-right: 1rem;
 `;
 
 export class Board extends React.Component {

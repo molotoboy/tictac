@@ -14,10 +14,11 @@ const StyledGame = styled.div`
   h2 {
     color: red;
     margin: 0;
-    padding: 1rem;
+    padding: 1rem 0 1rem 0;
     text-align: center;
   }
 `;
+const ContainerBoard = styled.div``;
 const StyledInfo = styled.div`
   margin-top: 1rem;
   margin-left: 1rem;
@@ -35,14 +36,14 @@ export class Game extends React.Component {
     super(props);
     this.state = {
       boardConfig: {
-        boardW: 15,
-        boardH: 15,
-        goal: 5,
+        boardW: 3,
+        boardH: 3,
+        goal: 3,
         players: ["O", "X"]
       },
       newBoardConfig: {
-        boardW: 7,
-        boardH: 7,
+        boardW: 10,
+        boardH: 10,
         goal: 5,
         players: ["O", "X"]
       },
@@ -52,7 +53,7 @@ export class Game extends React.Component {
           position: null
         }
       ],
-      winnerPositions: [],
+      winnerPositions: null,
       activeStep: 0,
       nextPlayer: 0
     };
@@ -60,8 +61,6 @@ export class Game extends React.Component {
     this.state.history[0].squares.length =
       this.state.boardConfig.boardW * this.state.boardConfig.boardH;
     this.state.history[0].squares.fill(null);
-    this.state.winnerPositions.length = this.state.boardConfig.goal;
-    this.state.winnerPositions.fill(null);
   }
 
   changeBoard = () => {
@@ -75,14 +74,10 @@ export class Game extends React.Component {
       this.state.newBoardConfig.boardW * this.state.newBoardConfig.boardH;
     newHistory[0].squares.fill(null);
 
-    const newWinnerPositions = [];
-    newWinnerPositions.length = this.state.newBoardConfig.goal;
-    newWinnerPositions.fill(null);
-
     this.setState({
       boardConfig: { ...this.state.newBoardConfig },
       history: newHistory,
-      winnerPositions: newWinnerPositions,
+      winnerPositions: null,
       activeStep: 0,
       nextPlayer: 0
     });
@@ -90,7 +85,7 @@ export class Game extends React.Component {
 
   validateSize = (value, goal) =>
     (goal === 3 && value === 3) ||
-    (goal > 3 && goal <= value && value >= 3 && value <= 20);
+    (goal > 3 && goal <= value && value > 3 && value <= 20);
   validateGoal = (goal, boardW, boardH) =>
     (goal === 3 && boardW === 3 && boardH === 3) ||
     (goal > 3 && goal <= boardH && goal <= boardW);
@@ -133,57 +128,65 @@ export class Game extends React.Component {
   jumpTo = step => {
     this.setState({
       activeStep: step,
-      nextPlayer: step % 2
+      nextPlayer: step % 2,
+      winnerPositions: null
     });
   };
 
   squareClickHandler = i => {
-    const { boardW, boardH, goal } = this.state.boardConfig;
-    const history = this.state.history.slice(0, this.state.activeStep + 1);
+    const { boardH, boardW, goal } = this.state.boardConfig;
+    const activeStep = this.state.activeStep;
+    const history = this.state.history.slice(0, activeStep + 1);
     const current = history[history.length - 1];
     const squares = current.squares.slice();
-    const winnerPositions = calculateWinner(
-      current.squares,
-      boardW,
-      boardH,
-      goal
-    );
+    const winnerPositions = this.state.winnerPositions;
     // console.log(i);
     if (squares[i] || winnerPositions) {
       return;
     }
-    if (winnerPositions) {
-      this.setState({
+
+    this.setState(state => {
+      const squares = state.history[state.activeStep].squares
+        .slice(0, i)
+        .concat(state.boardConfig.players[state.nextPlayer])
+        .concat(state.history[state.activeStep].squares.slice(i + 1));
+      const winnerPositions = calculateWinner(squares, boardH, boardW, goal);
+      return {
+        ...state,
+        history: state.history.slice(0, state.activeStep + 1).concat([
+          {
+            squares: squares,
+            position: i
+          }
+        ]),
+        activeStep: state.activeStep + 1,
+        nextPlayer: (state.nextPlayer + 1) % 2,
         winnerPositions: winnerPositions
-      });
-    }
-    squares[i] = this.state.boardConfig.players[this.state.nextPlayer];
-    this.setState({
-      history: history.concat([
-        {
-          squares: squares,
-          position: i
-        }
-      ]),
-      activeStep: history.length,
-      nextPlayer: (this.state.nextPlayer + 1) % 2
+      };
     });
+
+    //next (automat) player move
+    this.nextPlayer();
+  };
+
+  nextPlayer = () => {
+    const { boardH, boardW, goal } = this.state.boardConfig;
+    const history = this.state.history;
+    const current = history[this.state.activeStep];
+
+    // console.log(this.state);
+    const squareRating = nextMove(
+      this.state.nextPlayer,
+      current.squares,
+      this.state.boardConfig
+    );
   };
 
   render() {
     const { boardH, boardW, goal } = this.state.boardConfig;
     const history = this.state.history;
     const current = history[this.state.activeStep];
-    const winnerPositions = calculateWinner(
-      current.squares,
-      boardH,
-      boardW,
-      goal
-    );
-    let winner = null;
-    if (winnerPositions) {
-      winner = current.squares[winnerPositions[0]];
-    }
+
     // console.log(this.state);
     const squareRating = nextMove(
       this.state.nextPlayer,
@@ -191,8 +194,12 @@ export class Game extends React.Component {
       this.state.boardConfig
     );
 
+    let winner = null;
+    const winnerPositions = this.state.winnerPositions;
+    if (winnerPositions) winner = current.squares[winnerPositions[0]];
+
     let status;
-    if (winner) {
+    if (winnerPositions) {
       status = "Выиграл " + winner;
     } else if (this.state.activeStep === boardH * boardW) {
       status = "Ничья";
@@ -209,7 +216,7 @@ export class Game extends React.Component {
             error={this.state.error}
           />
         </StyledConfig>
-        <div>
+        <ContainerBoard>
           <h2>{status}</h2>
           <Board
             boardW={boardW}
@@ -220,7 +227,7 @@ export class Game extends React.Component {
             winnerPositions={winnerPositions}
             squareRating={squareRating}
           />
-        </div>
+        </ContainerBoard>
         <StyledInfo>
           <MoveList
             history={history}
