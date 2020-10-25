@@ -57,7 +57,7 @@ export function nextMove(player, squares, boardConfig) {
 
   //bestMove = locateSquareByNumber(flatArr[0], boardConfig);
   //bestMove = flatArr[0];
-  console.log("sortedSquareRating ", sortedSquareRating);
+  // console.log("sortedSquareRating", sortedSquareRating);
   return { squareRating, sortedSquareRating, maxRate };
 }
 
@@ -152,10 +152,8 @@ function makeOpportunities(squares, boardConfig) {
                 newSequence.occupied[player]++;
                 if (newSequence.status === null) {
                   newSequence.status = player;
-                } else {
-                  if (newSequence.status !== player) {
-                    newSequence.status = -1;
-                  }
+                } else if (newSequence.status !== player) {
+                  newSequence.status = -1;
                 }
               }
             }
@@ -165,7 +163,7 @@ function makeOpportunities(squares, boardConfig) {
       }
     }
   }
-  console.log(opportunities);
+  // console.log("opportunities",opportunities);
   return opportunities;
 }
 
@@ -190,14 +188,31 @@ function makeSquareRating(player, opportunities, squares, boardConfig) {
   squareRating.fill(0);
 
   const otherPlayer = (player + 1) % 2;
+
   for (let pl = 0; pl <= 1; pl++) {
     opportunities
-      .filter(o => o.occupied[pl] >= boardConfig.goal - 2 && o.status === pl)
+      .filter(o => o.occupied[pl] >= boardConfig.goal - 1 && o.status === pl)
       .forEach(o =>
         o.sequence
           .filter(c => squares[c] === null)
-          .forEach(c => (squareRating[c] += 50 * o.occupied[pl]))
+          .forEach(
+            c => (squareRating[c] += (pl === player ? 75 : 50) * o.occupied[pl])
+          )
       );
+  }
+  if (boardConfig.goal > 3) {
+    for (let pl = 0; pl <= 1; pl++) {
+      opportunities
+        .filter(o => o.occupied[pl] >= boardConfig.goal - 2 && o.status === pl)
+        .forEach(o =>
+          o.sequence
+            .filter(c => squares[c] === null)
+            .forEach(
+              c =>
+                (squareRating[c] += (pl === player ? 30 : 20) * o.occupied[pl])
+            )
+        );
+    }
   }
   for (let i = 0; i < boardH * boardW; i++) {
     if (squares[i] === null) {
@@ -206,13 +221,12 @@ function makeSquareRating(player, opportunities, squares, boardConfig) {
         .forEach(o => {
           if (o.status === null) squareRating[i] += 1;
           if (o.status === player)
-            squareRating[i] += o.occupied[player] * o.occupied[player] * 2;
+            squareRating[i] += o.occupied[player] ** 2 * 3;
           if (o.status === otherPlayer)
-            squareRating[i] +=
-              o.occupied[otherPlayer] * o.occupied[otherPlayer] * 2;
+            squareRating[i] += o.occupied[otherPlayer] ** 2 * 2;
         });
     }
   }
-  console.log(squareRating);
+  // console.log("squareRating", squareRating);
   return squareRating;
 }
