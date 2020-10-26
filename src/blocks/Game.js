@@ -83,12 +83,29 @@ export class Game extends React.Component {
     });
   };
 
-  validateSize = (value, goal) =>
-    (goal === 3 && value === 3) ||
-    (goal > 3 && goal <= value && value > 3 && value <= 20);
-  validateGoal = (goal, boardW, boardH) =>
-    (goal === 3 && boardW === 3 && boardH === 3) ||
-    (goal > 3 && goal <= boardH && goal <= boardW);
+  validateSize = (value, goal) => {
+    if (
+      (goal === 3 && value === 3) ||
+      (goal > 3 && goal <= value && value > 3 && value <= 20)
+    )
+      return { error: null };
+    else
+      return {
+        error: "Размер должен быть 3 если цель 3, или больше 3 и меньше 20"
+      };
+  };
+  validateGoal = (goal, boardW, boardH) => {
+    if (
+      (goal === 3 && boardW === 3 && boardH === 3) ||
+      (goal > 3 && goal <= boardH && goal <= boardW)
+    )
+      return { error: null };
+    else
+      return {
+        error:
+          "Цель может быть 3, если поле 3х3 или больше, но не больше ширины и высоты"
+      };
+  };
 
   onChange = e => {
     e.persist();
@@ -96,23 +113,12 @@ export class Game extends React.Component {
     const value = +e.target.value;
     const BoardConfig = { ...this.state.newBoardConfig };
     if (name === "boardW" || name === "boardH") {
-      if (this.validateSize(value, BoardConfig.goal)) {
-        this.setState({ error: null });
-      } else {
-        this.setState({
-          error: "Размер должен быть 3 если цель 3, или больше 3 и меньше 20"
-        });
-      }
+      this.setState(this.validateSize(value, BoardConfig.goal));
     }
     if (name === "goal") {
-      if (this.validateGoal(value, BoardConfig.boardH, BoardConfig.boardW)) {
-        this.setState({ error: null });
-      } else {
-        this.setState({
-          error:
-            "Цель может быть 3, если поле 3х3 или больше, но не больше ширины и высоты"
-        });
-      }
+      this.setState(
+        this.validateGoal(value, BoardConfig.boardH, BoardConfig.boardW)
+      );
     }
     BoardConfig[name] = value;
     this.setState(state => ({
@@ -134,39 +140,37 @@ export class Game extends React.Component {
   };
 
   squareClickHandler = i => {
-    const { boardH, boardW, goal } = this.state.boardConfig;
-    const activeStep = this.state.activeStep;
-    const history = this.state.history.slice(0, activeStep + 1);
-    const current = history[history.length - 1];
-    const squares = current.squares.slice();
-    const winnerPositions = this.state.winnerPositions;
-    // console.log(i);
-    if (squares[i] || winnerPositions) {
+    if (
+      this.state.history[this.state.activeStep].squares[i] ||
+      this.state.winnerPositions
+    ) {
       return;
     }
 
-    this.setState(state => {
-      const squares = state.history[state.activeStep].squares
-        .slice(0, i)
-        .concat(state.boardConfig.players[state.nextPlayer])
-        .concat(state.history[state.activeStep].squares.slice(i + 1));
-      const winnerPositions = calculateWinner(squares, boardH, boardW, goal);
-      return {
-        ...state,
-        history: state.history.slice(0, state.activeStep + 1).concat([
-          {
-            squares: squares,
-            position: i
-          }
-        ]),
-        activeStep: state.activeStep + 1,
-        nextPlayer: (state.nextPlayer + 1) % 2,
-        winnerPositions: winnerPositions
-      };
-    });
+    this.setState(state => this.setSquare(i, state));
 
     //next (automat) player move
     this.nextPlayer();
+  };
+
+  setSquare = (i, state) => {
+    const squares = state.history[state.activeStep].squares
+      .slice(0, i)
+      .concat(state.boardConfig.players[state.nextPlayer])
+      .concat(state.history[state.activeStep].squares.slice(i + 1));
+    const winnerPositions = calculateWinner(squares, state.boardConfig);
+    return {
+      ...state,
+      history: state.history.slice(0, state.activeStep + 1).concat([
+        {
+          squares: squares,
+          position: i
+        }
+      ]),
+      activeStep: state.activeStep + 1,
+      nextPlayer: (state.nextPlayer + 1) % 2,
+      winnerPositions: winnerPositions
+    };
   };
 
   nextPlayer = () => {

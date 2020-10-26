@@ -1,4 +1,4 @@
-function calculateWinner(squares, boardW = 3, boardH = 3, goal = 3) {
+function calculateWinner(squares, { boardW = 3, boardH = 3, goal = 3 } = {}) {
   const boardLen = boardW * boardH;
 
   if (squares.length !== boardLen) {

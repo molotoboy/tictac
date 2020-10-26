@@ -78,9 +78,11 @@ test("should Win diagonal / XXXX ", () => {
         .concat(["O", "X", "X", "X"])
         .concat(["X", "X", "O", "O"])
         .concat(["X", "X", "O", "X"]),
-      4,
-      4,
-      4
+      {
+        boardW: 4,
+        boardH: 4,
+        goal: 4
+      }
     )
   ).toEqual([3, 6, 9, 12]);
 });
