@@ -39,13 +39,15 @@ export class Game extends React.Component {
         boardW: 3,
         boardH: 3,
         goal: 3,
-        players: ["O", "X"]
+        players: ["O", "X"],
+        automat: [0, 1]
       },
       newBoardConfig: {
         boardW: 10,
         boardH: 10,
         goal: 5,
-        players: ["O", "X"]
+        players: ["O", "X"],
+        automat: [0, 1]
       },
       history: [
         {
@@ -132,25 +134,26 @@ export class Game extends React.Component {
   };
 
   jumpTo = step => {
-    this.setState({
-      activeStep: step,
-      nextPlayer: step % 2,
-      winnerPositions: null
-    });
+    this.setState(
+      {
+        activeStep: step,
+        nextPlayer: step % 2,
+        winnerPositions: null
+      },
+      this.nextPlayer
+    );
   };
 
   squareClickHandler = i => {
     if (
       this.state.history[this.state.activeStep].squares[i] ||
-      this.state.winnerPositions
+      this.state.winnerPositions ||
+      this.state.boardConfig.automat[this.state.nextPlayer]
     ) {
       return;
     }
 
-    this.setState(state => this.setSquare(i, state));
-
-    //next (automat) player move
-    this.nextPlayer();
+    this.setState(state => this.setSquare(i, state), this.nextPlayer);
   };
 
   setSquare = (i, state) => {
@@ -175,15 +178,26 @@ export class Game extends React.Component {
 
   nextPlayer = () => {
     const { boardH, boardW, goal } = this.state.boardConfig;
+    const boardLen = boardW * boardH;
+    if (this.state.activeStep + 1 > boardLen || this.state.winnerPositions)
+      return;
+
     const history = this.state.history;
     const current = history[this.state.activeStep];
+    if (this.state.boardConfig.automat[this.state.nextPlayer]) {
+      // console.log(this.state);
+      const squareRating = nextMove(
+        this.state.nextPlayer,
+        current.squares,
+        this.state.boardConfig
+      );
+      const bestSquares = squareRating.squareRating
+        .map((c, i) => (c === squareRating.maxRate ? i : -1))
+        .filter(c => c >= 0 && current.squares[c] === null);
 
-    // console.log(this.state);
-    const squareRating = nextMove(
-      this.state.nextPlayer,
-      current.squares,
-      this.state.boardConfig
-    );
+      const bestMove = bestSquares[(Math.random() * bestSquares.length) | 0];
+      this.setState(state => this.setSquare(bestMove, state));
+    }
   };
 
   render() {

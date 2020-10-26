@@ -223,7 +223,7 @@ function makeSquareRating(player, opportunities, squares, boardConfig) {
           if (o.status === player)
             squareRating[i] += o.occupied[player] ** 2 * 3;
           if (o.status === otherPlayer)
-            squareRating[i] += o.occupied[otherPlayer] ** 2 * 2;
+            squareRating[i] += o.occupied[otherPlayer] ** 2 * 2; //or * 3 for defense
         });
     }
   }
