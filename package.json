@@ -7,7 +7,7 @@
     "@emotion/styled": "^10.0.27",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
-    "react-scripts": "^3.4.1"
+    "react-scripts": "^5.0.1"
   },
   "scripts": {
     "format": "prettier \"src/**/*.{js,html}\" --write",
@@ -35,7 +35,7 @@
   "devDependencies": {
     "babel-eslint": "^10.1.0",
     "babel-plugin-emotion": "^10.0.33",
-    "eslint": "^6.8.0",
+    "eslint": "^9.39.1",
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-react": "^7.19.0",
     "prettier": "^1.19.1",
